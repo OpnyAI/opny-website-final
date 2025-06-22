@@ -98,7 +98,7 @@ export default function Home() {
           </p>
           {/* Garantiert funktionierender Mailto-Button */}
           <a
-            href="mailto:kontakt@opny.ai?subject=Pilotkunde%20Opny"
+            href="mailto:info@opny.ai?subject=Pilotkunde%20Opny"
             className="inline-block bg-blue-700 text-white px-8 py-3 rounded-xl text-lg font-semibold shadow hover:bg-blue-800 transition mb-2"
           >
             Pilotkunde werden
@@ -166,7 +166,7 @@ export default function Home() {
           </p>
           {/* Garantiert funktionierender Mailto-Button */}
           <a
-            href="mailto:kontakt@opny.ai?subject=Pilotkunde%20Opny"
+            href="mailto:info@opny.ai?subject=Pilotkunde%20Opny"
             className="inline-block bg-blue-700 text-white px-8 py-3 rounded-xl text-lg font-semibold shadow hover:bg-blue-800 transition"
           >
             Pilotkunde werden
@@ -176,7 +176,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-8 text-center text-sm">
         <p>© 2025 Opny. Alle Rechte vorbehalten.</p>
-        <p className="mt-2">kontakt@opny.ai</p>
+        <p className="mt-2">info@opny.ai</p>
       </footer>
 
       {/* Apple-Style: Scrollbar verstecken */}
