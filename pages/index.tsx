@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Card from "../components/Card";
 import Image from "next/image";
-import { useRef } from "react";
+import React, { useState, useRef } from "react";
 
 const logoUrl = "/logo-opny.png";
 
@@ -43,15 +43,85 @@ const carouselItems = [
   },
 ];
 
-export default function Home() {
-  const carouselRef = useRef<HTMLDivElement>(null);
+const ITEMS_PER_SLIDE_DESKTOP = 3;
 
-  const scrollCarousel = () => {
-    if (carouselRef.current) {
-      const amount = carouselRef.current.offsetWidth * 0.9;
-      carouselRef.current.scrollBy({ left: amount, behavior: "smooth" });
+export default function Home() {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const total = carouselItems.length;
+  const [windowWidth, setWindowWidth] = useState<number | null>(null);
+
+  // Responsiveness (for showing 3 cards on desktop)
+  React.useEffect(() => {
+    function handleResize() {
+      setWindowWidth(window.innerWidth);
+    }
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  const isDesktop = windowWidth !== null ? windowWidth >= 768 : false; // Tailwind md
+
+  // Carousel logic (looping)
+  const prevSlide = () => {
+    if (isDesktop) {
+      setActiveIndex((prev) =>
+        (prev - ITEMS_PER_SLIDE_DESKTOP + total) % total
+      );
+    } else {
+      setActiveIndex((prev) => (prev - 1 + total) % total);
     }
   };
+  const nextSlide = () => {
+    if (isDesktop) {
+      setActiveIndex((prev) =>
+        (prev + ITEMS_PER_SLIDE_DESKTOP) % total
+      );
+    } else {
+      setActiveIndex((prev) => (prev + 1) % total);
+    }
+  };
+
+  // Mobile swipe
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.targetTouches[0].clientX;
+  };
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.targetTouches[0].clientX;
+  };
+  const handleTouchEnd = () => {
+    if (touchStartX.current !== null && touchEndX.current !== null) {
+      const diff = touchStartX.current - touchEndX.current;
+      if (diff > 40) nextSlide();
+      if (diff < -40) prevSlide();
+    }
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
+
+  // Für Desktop: drei Karten berechnen (startend bei activeIndex)
+  const getVisibleItems = () => {
+    if (!isDesktop) {
+      return [carouselItems[activeIndex]];
+    }
+    let items = [];
+    for (let i = 0; i < ITEMS_PER_SLIDE_DESKTOP; i++) {
+      items.push(carouselItems[(activeIndex + i) % total]);
+    }
+    return items;
+  };
+
+  // Indikatoren (bei Desktop für jedes Set von 3, bei Mobile für jede Karte)
+  const getIndicatorCount = () =>
+    isDesktop
+      ? Math.ceil(total / ITEMS_PER_SLIDE_DESKTOP)
+      : total;
+  const getIndicatorActive = () =>
+    isDesktop
+      ? Math.floor(activeIndex / ITEMS_PER_SLIDE_DESKTOP)
+      : activeIndex;
 
   return (
     <>
@@ -60,10 +130,9 @@ export default function Home() {
         <meta name="description" content="Opny – KI-Startup für KMU. KI-Angebotsgenerator, Website Chatbot, E-Mail Assistent, Q&A-System, Analytics und individuelle KI-Implementierungen." />
       </Head>
 
-      {/* Apple-Style Header */}
+      {/* Header (wie gehabt) */}
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur shadow-sm border-b border-gray-100">
         <nav className="flex justify-between items-center max-w-6xl mx-auto px-6 py-4">
-          {/* Logo & Schriftzug, perfekt vertikal ausgerichtet */}
           <a href="/" className="flex items-center gap-2">
             <div className="flex items-center h-9">
               <Image src={logoUrl} alt="Opny Logo" width={36} height={36} className="object-contain" priority />
@@ -83,7 +152,7 @@ export default function Home() {
       </header>
 
       <main className="min-h-screen bg-white text-gray-900">
-        {/* Hero */}
+        {/* Hero (wie gehabt) */}
         <section className="flex flex-col items-center justify-center text-center px-4 py-24 bg-gradient-to-b from-blue-50 via-white to-white">
           <h1 className="text-5xl md:text-7xl font-bold mb-6">
             <span className="text-blue-700">KI greifbar für KMU</span><br /> – mit Opny.
@@ -96,7 +165,6 @@ export default function Home() {
             Opny ist ein unabhängiges deutsches <b>KI-Startup</b> – aktuell in der Pilotphase. <br />
             Du willst mehr? Wir implementieren auch individuelle KI-Lösungen projektbasiert.
           </p>
-          {/* Garantiert funktionierender Mailto-Button */}
           <a
             href="mailto:info@opny.ai?subject=Pilotkunde%20Opny"
             className="inline-block bg-blue-700 text-white px-8 py-3 rounded-xl text-lg font-semibold shadow hover:bg-blue-800 transition mb-2"
@@ -106,41 +174,64 @@ export default function Home() {
           <p className="text-gray-400 mt-2">Kostenlos & unverbindlich – Early Access sichern</p>
         </section>
 
-        {/* Tools as Apple-Style Carousel */}
+        {/* Carousel */}
         <section className="py-20 bg-gray-50" id="tools">
           <h2 className="text-4xl font-bold text-center mb-10">Deine Opny KI-Tools</h2>
-          <div className="relative max-w-6xl mx-auto">
-            {/* Carousel */}
+          <div className="relative max-w-6xl mx-auto flex flex-col items-center">
             <div
-              ref={carouselRef}
-              className="flex gap-8 overflow-x-auto pb-2 scroll-smooth snap-x snap-mandatory hide-scrollbar"
-              style={{ scrollBehavior: "smooth" }}
+              className="relative w-full flex items-center justify-center"
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
             >
-              {carouselItems.map((item, idx) => (
-                <div
-                  key={item.title}
-                  className="min-w-[340px] max-w-[350px] snap-start flex-shrink-0 transition-transform duration-300"
-                  style={{ scrollSnapAlign: "start" }}
-                >
-                  <Card className="h-full flex flex-col items-center text-center justify-between shadow-lg hover:shadow-2xl transition-shadow bg-white rounded-3xl border border-gray-200">
+              {/* Pfeil links */}
+              <button
+                aria-label="Zurück"
+                onClick={prevSlide}
+                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-blue-50 text-blue-700 shadow-md rounded-full p-2 transition border border-gray-200"
+                style={{ display: 'block' }}
+              >
+                <span className="text-2xl">&#8249;</span>
+              </button>
+
+              {/* Karten */}
+              <div className={`w-full flex items-center justify-center gap-4`}>
+                {getVisibleItems().map((item, idx) => (
+                  <Card key={item.title}
+                    className="h-full flex flex-col items-center text-center justify-between shadow-lg hover:shadow-2xl transition-shadow bg-white rounded-3xl border border-gray-200 p-8 w-full max-w-sm mx-auto min-h-[320px]"
+                  >
                     <span className="text-5xl mb-4">{item.icon}</span>
                     <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
                     <p className="text-gray-700">{item.desc}</p>
                   </Card>
-                </div>
-              ))}
-              {/* Apple-Style: kein „Leisten“-Hinweis, dezenter Arrow */}
+                ))}
+              </div>
+
+              {/* Pfeil rechts */}
               <button
                 aria-label="Weiter"
-                onClick={scrollCarousel}
-                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-blue-50 text-blue-700 shadow-md rounded-full p-2 transition hidden md:block"
-                style={{ border: "1.5px solid #d1d5db" }}
+                onClick={nextSlide}
+                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 hover:bg-blue-50 text-blue-700 shadow-md rounded-full p-2 transition border border-gray-200"
+                style={{ display: 'block' }}
               >
-                <span className="text-3xl font-bold">&rsaquo;</span>
+                <span className="text-2xl">&#8250;</span>
               </button>
             </div>
+
+            {/* Indikator Punkte */}
+            <div className="flex justify-center items-center gap-2 mt-6">
+              {[...Array(getIndicatorCount())].map((_, idx) => (
+                <button
+                  key={idx}
+                  aria-label={`Gehe zu Slide ${idx + 1}`}
+                  className={`w-3 h-3 rounded-full transition ${getIndicatorActive() === idx ? "bg-blue-600" : "bg-gray-300"}`}
+                  style={{ outline: "none" }}
+                  onClick={() => setActiveIndex(isDesktop ? idx * ITEMS_PER_SLIDE_DESKTOP : idx)}
+                />
+              ))}
+            </div>
+            <div className="text-center mt-6 text-gray-500">… und viele weitere Tools kommen laufend hinzu!</div>
           </div>
-          <div className="text-center mt-6 text-gray-500">… und viele weitere Tools kommen laufend hinzu!</div>
         </section>
 
         {/* Use Cases */}
@@ -164,7 +255,7 @@ export default function Home() {
             Fordere jetzt Zugang zu Opny an oder vereinbare eine persönliche Demo.<br />
             Oder sprich mit uns über eine projektbasierte, individuelle KI-Implementierung – wir beraten dich persönlich!
           </p>
-          {/* Garantiert funktionierender Mailto-Button */}
+          {/* Mailto-Button */}
           <a
             href="mailto:info@opny.ai?subject=Pilotkunde%20Opny"
             className="inline-block bg-blue-700 text-white px-8 py-3 rounded-xl text-lg font-semibold shadow hover:bg-blue-800 transition"
@@ -178,16 +269,6 @@ export default function Home() {
         <p>© 2025 Opny. Alle Rechte vorbehalten.</p>
         <p className="mt-2">info@opny.ai</p>
       </footer>
-
-      {/* Apple-Style: Scrollbar verstecken */}
-      <style jsx global>{`
-        .hide-scrollbar {
-          scrollbar-width: none;
-        }
-        .hide-scrollbar::-webkit-scrollbar {
-          display: none;
-        }
-      `}</style>
     </>
   );
 }
