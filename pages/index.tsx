@@ -195,17 +195,30 @@ export default function Home() {
               </button>
 
               {/* Karten */}
-              <div className={`w-full flex items-center justify-center gap-4`}>
-                {getVisibleItems().map((item, idx) => (
-                  <Card key={item.title}
-                    className="h-full flex flex-col items-center text-center justify-between shadow-lg hover:shadow-2xl transition-shadow bg-white rounded-3xl border border-gray-200 p-8 w-full max-w-sm mx-auto min-h-[320px]"
-                  >
-                    <span className="text-5xl mb-4">{item.icon}</span>
-                    <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                    <p className="text-gray-700">{item.desc}</p>
-                  </Card>
-                ))}
-              </div>
+              <div
+  className={`
+    w-full flex items-center justify-center gap-4
+    ${isDesktop ? "flex-row" : "flex-col"}
+  `}
+>
+  {getVisibleItems().map((item, idx) => (
+    <Card
+      key={item.title}
+      className={`
+        h-full flex flex-col items-center text-center justify-between
+        shadow-lg hover:shadow-2xl transition-shadow
+        bg-white rounded-3xl border border-gray-200 p-8
+        ${isDesktop ? "w-full max-w-sm" : "w-[90vw] max-w-xs mx-auto"}
+        min-h-[320px]
+      `}
+    >
+      <span className="text-5xl mb-4">{item.icon}</span>
+      <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
+      <p className="text-gray-700">{item.desc}</p>
+    </Card>
+  ))}
+</div>
+
 
               {/* Pfeil rechts */}
               <button
