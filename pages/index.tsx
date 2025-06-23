@@ -268,6 +268,10 @@ export default function Home() {
       <footer className="bg-gray-900 text-white py-8 text-center text-sm">
         <p>© 2025 Opny. Alle Rechte vorbehalten.</p>
         <p className="mt-2">info@opny.ai</p>
+        <div className="mt-4 flex gap-4 justify-center">
+          <a href="/impressum" className="underline hover:text-blue-300">Impressum</a>
+          <a href="/datenschutz" className="underline hover:text-blue-300">Datenschutz</a>
+        </div>
       </footer>
     </>
   );
