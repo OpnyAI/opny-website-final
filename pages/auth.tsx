@@ -112,7 +112,7 @@ export default function AuthPage() {
 
   async function handleGoogle() {
     await supabase.auth.signInWithOAuth({ provider: "google", options: {
-      redirectTo: "http://localhost:3000/auth" 
+      redirectTo: "https://opny.ai/auth/callback" 
     // Nach dem Login kommt der User per OAuth-Redirect wieder auf /auth,
     // dort läuft dann der useEffect und übernimmt die Weiterleitung!
   }

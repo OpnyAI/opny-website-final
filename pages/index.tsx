@@ -126,9 +126,22 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Opny – KI-Tools für KMU</title>
-        <meta name="description" content="Opny – KI-Startup für KMU. KI-Angebotsgenerator, Website Chatbot, E-Mail Assistent, Q&A-System, Analytics und individuelle KI-Implementierungen." />
-      </Head>
+  <title>Opny – KI-Tools für KMU | Angebote, Chatbots & Automatisierung</title>
+  <meta
+    name="description"
+    content="Opny – KI-Tools speziell für kleine und mittlere Unternehmen: Angebote, Chatbots, E-Mail-Assistent, Analytics, individuelle Automatisierung. Jetzt Pilotkunde werden!"
+  />
+  <meta property="og:title" content="Opny – KI-Tools für KMU" />
+  <meta property="og:description" content="KI-Tools für Angebote, Chatbots, E-Mail und Analyse. Entwickelt in Deutschland für den Mittelstand." />
+  <meta property="og:image" content="https://deine-domain.de/opny-og-image.jpg" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://deine-domain.de/" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Opny – KI-Tools für KMU" />
+  <meta name="twitter:description" content="KI-Angebote, Chatbots, Analyse. Jetzt Pilotkunde werden!" />
+  <meta name="twitter:image" content="https://deine-domain.de/opny-og-image.jpg" />
+</Head>
+
 
       {/* Header (wie gehabt) */}
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur shadow-sm border-b border-gray-100">
