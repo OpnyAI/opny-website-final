@@ -18,7 +18,7 @@ export default function Impressum() {
             E-Mail: info@opny.ai<br /><br />
             Umsatzsteuer-ID: DE367221694<br /><br />
             Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV:<br />
-            Mehmet Çatalsakal, Naumannstr. 2, 73663 Berglen<br /><br />
+            Mehmet Çatalsakal, Naumannstr. 3, 73663 Berglen<br /><br />
             Online-Streitbeilegung:<br />
             <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noopener noreferrer" className="underline text-blue-700">europa.eu/consumers/odr/</a><br /><br />
             Verbraucherstreitbeilegung/Universalschlichtungsstelle:<br />
