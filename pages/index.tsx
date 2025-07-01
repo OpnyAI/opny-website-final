@@ -126,24 +126,29 @@ export default function Home() {
   return (
     <>
       <Head>
-  <title>Opny – KI-Tools für KMU | Angebote, Chatbots & Automatisierung</title>
-  <meta
-    name="description"
-    content="Opny – KI-Tools speziell für kleine und mittlere Unternehmen: Angebote, Chatbots, E-Mail-Assistent, Analytics, individuelle Automatisierung. Jetzt Pilotkunde werden!"
-  />
-  <meta property="og:title" content="Opny – KI-Tools für KMU" />
-  <meta property="og:description" content="KI-Tools für Angebote, Chatbots, E-Mail und Analyse. Entwickelt in Deutschland für den Mittelstand." />
-  <meta property="og:image" content="https://deine-domain.de/opny-og-image.jpg" />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://deine-domain.de/" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Opny – KI-Tools für KMU" />
-  <meta name="twitter:description" content="KI-Angebote, Chatbots, Analyse. Jetzt Pilotkunde werden!" />
-  <meta name="twitter:image" content="https://deine-domain.de/opny-og-image.jpg" />
-</Head>
+        <title>Opny – KI-Tools für KMU | Angebote, Chatbots & Automatisierung</title>
+        <meta
+          name="description"
+          content="Opny bietet KI-Tools speziell für kleine und mittlere Unternehmen: Automatisiere Angebotserstellung, E-Mail-Antworten, Kundensupport & mehr – DSGVO-konform, schnell und individuell."
+        />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://www.opny.ai/" />
 
+        {/* Open Graph für Social Media */}
+        <meta property="og:title" content="Opny – KI für KMU" />
+        <meta property="og:description" content="Automatisiere Angebote, Support & Kommunikation mit unseren KI-Lösungen. Jetzt kostenlos Pilotkunde werden!" />
+        <meta property="og:image" content="https://www.opny.ai/logo-opny.png" />
+        <meta property="og:url" content="https://www.opny.ai/" />
+        <meta property="og:type" content="website" />
 
-      {/* Header (wie gehabt) */}
+        {/* Twitter Cards */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Opny – KI für den Mittelstand" />
+        <meta name="twitter:description" content="Opny hilft KMU bei Automatisierung mit GPT & Co. Jetzt Pilotpartner werden." />
+        <meta name="twitter:image" content="https://www.opny.ai/logo-opny.png" />
+      </Head>
+
+      {/* Header */}
       <header className="sticky top-0 z-50 bg-white/80 backdrop-blur shadow-sm border-b border-gray-100">
         <nav className="flex justify-between items-center max-w-6xl mx-auto px-6 py-4">
           <a href="/" className="flex items-center gap-2">
@@ -165,7 +170,7 @@ export default function Home() {
       </header>
 
       <main className="min-h-screen bg-white text-gray-900">
-        {/* Hero (wie gehabt) */}
+        {/* Hero */}
         <section className="flex flex-col items-center justify-center text-center px-4 py-24 bg-gradient-to-b from-blue-50 via-white to-white">
           <h1 className="text-5xl md:text-7xl font-bold mb-6">
             <span className="text-blue-700">KI greifbar für KMU</span><br /> – mit Opny.
@@ -209,29 +214,28 @@ export default function Home() {
 
               {/* Karten */}
               <div
-  className={`
-    w-full flex items-center justify-center gap-4
-    ${isDesktop ? "flex-row" : "flex-col"}
-  `}
->
-  {getVisibleItems().map((item, idx) => (
-    <Card
-      key={item.title}
-      className={`
-        h-full flex flex-col items-center text-center justify-between
-        shadow-lg hover:shadow-2xl transition-shadow
-        bg-white rounded-3xl border border-gray-200 p-8
-        ${isDesktop ? "w-full max-w-sm" : "w-[90vw] max-w-xs mx-auto"}
-        min-h-[320px]
-      `}
-    >
-      <span className="text-5xl mb-4">{item.icon}</span>
-      <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-      <p className="text-gray-700">{item.desc}</p>
-    </Card>
-  ))}
-</div>
-
+                className={`
+                  w-full flex items-center justify-center gap-4
+                  ${isDesktop ? "flex-row" : "flex-col"}
+                `}
+              >
+                {getVisibleItems().map((item, idx) => (
+                  <Card
+                    key={item.title}
+                    className={`
+                      h-full flex flex-col items-center text-center justify-between
+                      shadow-lg hover:shadow-2xl transition-shadow
+                      bg-white rounded-3xl border border-gray-200 p-8
+                      ${isDesktop ? "w-full max-w-sm" : "w-[90vw] max-w-xs mx-auto"}
+                      min-h-[320px]
+                    `}
+                  >
+                    <span className="text-5xl mb-4">{item.icon}</span>
+                    <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
+                    <p className="text-gray-700">{item.desc}</p>
+                  </Card>
+                ))}
+              </div>
 
               {/* Pfeil rechts */}
               <button
@@ -290,6 +294,7 @@ export default function Home() {
           </a>
         </section>
       </main>
+
       {/* Footer */}
       <footer className="bg-gray-900 text-white py-8 text-center text-sm">
         <p>© 2025 Opny. Alle Rechte vorbehalten.</p>
