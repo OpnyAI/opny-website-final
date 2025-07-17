@@ -1,9 +1,4 @@
-# *
 User-agent: *
 Allow: /
 
-# Host
-Host: https://www.opny.ai
-
-# Sitemaps
-Sitemap: https://www.opny.ai/sitemap.xml
+Sitemap: https://opny.ai/sitemap.xml
