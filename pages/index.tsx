@@ -132,20 +132,20 @@ export default function Home() {
           content="Opny bietet KI-Tools speziell für kleine und mittlere Unternehmen: Automatisiere Angebotserstellung, E-Mail-Antworten, Kundensupport & mehr – DSGVO-konform, schnell und individuell."
         />
         <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://www.opny.ai/" />
+        <link rel="canonical" href="https://opny.ai/" />
 
         {/* Open Graph für Social Media */}
         <meta property="og:title" content="Opny – KI für KMU" />
         <meta property="og:description" content="Automatisiere Angebote, Support & Kommunikation mit unseren KI-Lösungen. Jetzt kostenlos Pilotkunde werden!" />
-        <meta property="og:image" content="https://www.opny.ai/logo-opny.png" />
-        <meta property="og:url" content="https://www.opny.ai/" />
+        <meta property="og:image" content="https://opny.ai/logo-opny.png" />
+        <meta property="og:url" content="https://opny.ai/" />
         <meta property="og:type" content="website" />
 
         {/* Twitter Cards */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content="Opny – KI für den Mittelstand" />
         <meta name="twitter:description" content="Opny hilft KMU bei Automatisierung mit GPT & Co. Jetzt Pilotpartner werden." />
-        <meta name="twitter:image" content="https://www.opny.ai/logo-opny.png" />
+        <meta name="twitter:image" content="https://opny.ai/logo-opny.png" />
       </Head>
 
       {/* Header */}
