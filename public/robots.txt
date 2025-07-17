@@ -1,4 +1,12 @@
 User-agent: *
+Disallow: /auth
+Disallow: /products
+Disallow: /customers
+Disallow: /onboarding
+Disallow: /company-profile
+Disallow: /impressum
+Disallow: /datenschutz
+
 Allow: /
 
 Sitemap: https://opny.ai/sitemap.xml
