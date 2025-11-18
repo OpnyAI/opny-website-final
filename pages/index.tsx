@@ -2,135 +2,10 @@ import Head from "next/head";
 import Card from "../components/Card";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useState, useRef } from "react";
 
 const logoUrl = "/logo-opny.png";
 
-type FeatureItem = {
-  code: string;
-  title: string;
-  desc: string;
-};
-
-// Inhalte „Warum opny.ai?“
-const carouselItems: FeatureItem[] = [
-  {
-    code: "SEC",
-    title: "Sicherheit & Compliance",
-    desc: "Verhindern Sie Datenlecks mit anpassbaren Richtlinien. Schützen Sie sensible Informationen und bleiben Sie DSGVO-konform – ohne Produktivitätsverlust.",
-  },
-  {
-    code: "ROUT",
-    title: "Intelligentes Routing",
-    desc: "Automatische Auswahl des optimalen KI-Modells basierend auf Aufgabe, Latenz und Kosten – mit Fallback-Logik für maximale Verfügbarkeit.",
-  },
-  {
-    code: "COST",
-    title: "Kostenkontrolle",
-    desc: "Überwachen Sie API-Token-Verbrauch, setzen Sie Budgets pro Team oder Projekt und optimieren Sie Ihre KI-Ausgaben in Echtzeit.",
-  },
-  {
-    code: "LOGS",
-    title: "Vollständige Transparenz",
-    desc: "Detaillierte Logs und Traces für jeden Prompt, jede Antwort und jede Interaktion. Volle Einsicht in die KI-Nutzung Ihres Unternehmens.",
-  },
-  {
-    code: "API",
-    title: "Schnelle Integration",
-    desc: "Ein API-Endpunkt für alle Modelle. Das Plug-and-Play-Gateway reduziert Entwicklungsaufwand und Wartungskosten erheblich.",
-  },
-  {
-    code: "LLMs",
-    title: "200+ KI-Modelle",
-    desc: "Zugriff auf führende Modelle von OpenAI, Anthropic, Google, Meta und mehr – alles über eine zentrale Plattform.",
-  },
-];
-
-const ITEMS_PER_SLIDE_DESKTOP = 3;
-
 export default function Home() {
-  const [activeIndex, setActiveIndex] = useState(0);
-  const total = carouselItems.length;
-  const [windowWidth, setWindowWidth] = useState<number | null>(null);
-  const [isHovered, setIsHovered] = useState(false);
-
-  // Responsive (3 Karten auf Desktop)
-  React.useEffect(() => {
-    function handleResize() {
-      setWindowWidth(window.innerWidth);
-    }
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
-
-  const isDesktop = windowWidth !== null ? windowWidth >= 768 : false; // Tailwind md
-
-  // Carousel-Logik (loopend)
-  const prevSlide = () => {
-    if (isDesktop) {
-      setActiveIndex(
-        (prev) => (prev - ITEMS_PER_SLIDE_DESKTOP + total) % total
-      );
-    } else {
-      setActiveIndex((prev) => (prev - 1 + total) % total);
-    }
-  };
-  const nextSlide = () => {
-    if (isDesktop) {
-      setActiveIndex((prev) => (prev + ITEMS_PER_SLIDE_DESKTOP) % total);
-    } else {
-      setActiveIndex((prev) => (prev + 1) % total);
-    }
-  };
-
-  // Autoplay / Endlosschleife (pausiert bei Hover)
-  React.useEffect(() => {
-    if (isHovered) return;
-    const interval = setInterval(() => {
-      nextSlide();
-    }, 6000);
-    return () => clearInterval(interval);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isHovered, isDesktop, total]);
-
-  // Touch-Swipe Mobile
-  const touchStartX = useRef<number | null>(null);
-  const touchEndX = useRef<number | null>(null);
-  const handleTouchStart = (e: React.TouchEvent) => {
-    touchStartX.current = e.targetTouches[0].clientX;
-  };
-  const handleTouchMove = (e: React.TouchEvent) => {
-    touchEndX.current = e.targetTouches[0].clientX;
-  };
-  const handleTouchEnd = () => {
-    if (touchStartX.current !== null && touchEndX.current !== null) {
-      const diff = touchStartX.current - touchEndX.current;
-      if (diff > 40) nextSlide();
-      if (diff < -40) prevSlide();
-    }
-    touchStartX.current = null;
-    touchEndX.current = null;
-  };
-
-  // Sichtbare Items (Desktop: 3, Mobile: 1)
-  const getVisibleItems = () => {
-    if (!isDesktop) {
-      return [carouselItems[activeIndex]];
-    }
-    const items: FeatureItem[] = [];
-    for (let i = 0; i < ITEMS_PER_SLIDE_DESKTOP; i++) {
-      items.push(carouselItems[(activeIndex + i) % total]);
-    }
-    return items;
-  };
-
-  // Indikatoren
-  const getIndicatorCount = () =>
-    isDesktop ? Math.ceil(total / ITEMS_PER_SLIDE_DESKTOP) : total;
-  const getIndicatorActive = () =>
-    isDesktop ? Math.floor(activeIndex / ITEMS_PER_SLIDE_DESKTOP) : activeIndex;
-
   return (
     <>
       <Head>
@@ -238,93 +113,64 @@ export default function Home() {
           </p>
         </section>
 
-        {/* Warum opny.ai? */}
-        <section className="py-20 bg-[#f5f7fa]">
+        {/* Warum opny.ai – Infinite Marquee */}
+        <section className="py-20 bg-[#f5f7fa]" id="warum">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-10 tracking-tight">
             Warum opny.ai?
           </h2>
-          <div
-            className="relative max-w-6xl mx-auto flex flex-col items-center"
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-          >
-            <div
-              className="relative w-full flex items-center justify-center"
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
-            >
-              {/* Pfeil links */}
-              <button
-                aria-label="Zurück"
-                onClick={prevSlide}
-                className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-blue-50 text-blue-700 shadow-[0_10px_30px_rgba(15,23,42,0.12)] rounded-full p-2 transition border border-gray-200"
-              >
-                <span className="text-xl">&lsaquo;</span>
-              </button>
 
-              {/* Karten */}
-              <div
-                className={`
-                  w-full flex items-center justify-center gap-4
-                  ${isDesktop ? "flex-row" : "flex-col"}
-                `}
-              >
-                {getVisibleItems().map(({ title, desc, code }) => (
+          <div className="overflow-hidden">
+            <div className="flex gap-6 animate-scroll-slow w-max">
+              {/* Inhalte 2× dupliziert für nahtlose Endlosschleife */}
+              {[...Array(2)].map((_, dupIdx) =>
+                [
+                  {
+                    code: "SEC",
+                    title: "Sicherheit & Compliance",
+                    text: "Verhindern Sie Datenlecks mit anpassbaren Richtlinien. Schützen Sie sensible Informationen und bleiben Sie DSGVO-konform – ohne Produktivitätsverlust.",
+                  },
+                  {
+                    code: "ROUT",
+                    title: "Intelligentes Routing",
+                    text: "Automatische Auswahl des optimalen KI-Modells basierend auf Aufgabe, Latenz und Kosten – mit Fallback-Logik für maximale Verfügbarkeit.",
+                  },
+                  {
+                    code: "COST",
+                    title: "Kostenkontrolle",
+                    text: "Überwachen Sie API-Token-Verbrauch, setzen Sie Budgets pro Team oder Projekt und optimieren Sie Ihre KI-Ausgaben in Echtzeit.",
+                  },
+                  {
+                    code: "LOGS",
+                    title: "Vollständige Transparenz",
+                    text: "Detaillierte Logs und Traces für jeden Prompt, jede Antwort und jede Interaktion. Volle Einsicht in die KI-Nutzung Ihres Unternehmens.",
+                  },
+                  {
+                    code: "API",
+                    title: "Schnelle Integration",
+                    text: "Ein API-Endpunkt für alle Modelle. Das Plug-and-Play-Gateway reduziert Entwicklungsaufwand und Wartungskosten erheblich.",
+                  },
+                  {
+                    code: "LLMs",
+                    title: "200+ KI-Modelle",
+                    text: "Zugriff auf führende Modelle von OpenAI, Anthropic, Google, Meta und mehr – alles über eine zentrale Plattform.",
+                  },
+                ].map((item, i) => (
                   <Card
-                    key={title}
-                    className={`
-                      h-full flex flex-col items-start text-left justify-between
-                      shadow-[0_18px_45px_rgba(15,23,42,0.06)]
-                      bg-white rounded-3xl border border-gray-100 px-8 py-8
-                      ${
-                        isDesktop
-                          ? "w-full max-w-sm"
-                          : "w-[90vw] max-w-xs mx-auto"
-                      }
-                      min-h-[260px]
-                    `}
+                    key={`${dupIdx}-${item.code}-${i}`}
+                    className="min-w-[320px] max-w-sm bg-white rounded-3xl border border-gray-100 p-8 shadow-[0_18px_45px_rgba(15,23,42,0.06)] flex flex-col gap-3"
                   >
-                    <div className="mb-4 inline-flex items-center justify-center rounded-2xl bg-blue-50 px-3 py-1">
-                      <span className="text-xs font-semibold tracking-wide text-blue-700">
-                        {code}
-                      </span>
-                    </div>
-                    <h3 className="text-lg font-semibold mb-2 text-gray-900">
-                      {title}
+                    <span className="inline-flex items-center justify-center rounded-2xl bg-blue-50 px-3 py-1 text-xs font-semibold tracking-wide text-blue-700 w-fit">
+                      {item.code}
+                    </span>
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      {item.title}
                     </h3>
-                    <p className="text-sm md:text-base text-gray-700">{desc}</p>
+                    <p className="text-sm md:text-base text-gray-700">
+                      {item.text}
+                    </p>
                   </Card>
-                ))}
-              </div>
-
-              {/* Pfeil rechts */}
-              <button
-                aria-label="Weiter"
-                onClick={nextSlide}
-                className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/90 hover:bg-blue-50 text-blue-700 shadow-[0_10px_30px_rgba(15,23,42,0.12)] rounded-full p-2 transition border border-gray-200"
-              >
-                <span className="text-xl">&rsaquo;</span>
-              </button>
-            </div>
-
-            {/* Indikator-Punkte */}
-            <div className="flex justify-center items-center gap-2 mt-6">
-              {[...Array(getIndicatorCount())].map((_, idx) => (
-                <button
-                  key={idx}
-                  aria-label={`Gehe zu Slide ${idx + 1}`}
-                  className={`w-2.5 h-2.5 rounded-full transition ${
-                    getIndicatorActive() === idx ? "bg-blue-600" : "bg-gray-300"
-                  }`}
-                  style={{ outline: "none" }}
-                  onClick={() =>
-                    setActiveIndex(
-                      isDesktop ? idx * ITEMS_PER_SLIDE_DESKTOP : idx
-                    )
-                  }
-                />
-              ))}
+                ))
+              )}
             </div>
           </div>
         </section>
